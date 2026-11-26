@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>Atlas de Bacteriología</title>
+	<style>
+
+:root {
+	--bg: #fafaf7;
+	--fg: #1d2420;
+	--mut: #66706a;
+	--card: #fff;
+	--bd: #dde3de;
+	--ac: #1f7a5a;
+	--ac2: #e6f3ed;
+	box-sizing: border-box;
+	padding-top: env(safe-area-inset-top,0px);
+	padding-bottom: env(safe-area-inset-bottom,0px);
+}
+
+@media (prefers-color-scheme:dark) {
+	:root:not([data-theme="light"]) {
+		--bg: #121715;
+		--fg: #e8ede9;
+		--mut: #9aa6a0;
+		--card: #1a211e;
+		--bd: #2c3631;
+		--ac: #5cc9a0;
+		--ac2: #1d2e27;
+		color-scheme:dark;
+	}
+}
+
+:root[data-theme="dark"] {
+	--bg: #121715;
+	--fg: #e8ede9;
+	--mut: #9aa6a0;
+	--card: #1a211e;
+	--bd: #2c3631;
+	--ac: #5cc9a0;
+	--ac2: #1d2e27;
+	color-scheme: dark;
+}
+
+html {
+	scroll-padding-top: env(safe-area-inset-top,0px);
+}
+
+[hidden] {
+	display: none !important;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+main {
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 16px;
+}
+
+h1 {
+	font-size: 2rem;
+	margin: .2em 0;
+	text-align: center;
+}
+
+h3 {
+	margin: 1.4em 0 .4em;
+	color: var(--ac);
+}
+
+h3 small {
+	color: var(--mut);
+	font-weight: 400;
+}
+
+h4 {
+	margin: .9em 0 .1em;
+	font-size: .9rem;
+	color: var(--ac);
+}
+
+p {
+	margin: .1em 0;
+	white-space: pre-wrap;
+}
+
+.mut {
+	color: var(--mut);
+}
+
+input, select, textarea, button {
+	font: inherit;
+	color: inherit
+}
+
+input[type=search], input[type=text], select, textarea {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 9px 10px;
+	border: 1px solid var(--bd);
+	border-radius: 10px;
+	background: var(--card);
+}
+
+textarea {
+	min-height: 70px;
+}
+
+.fichas {
+	display: flex;
+	gap: 6px;
+	overflow-x: auto;
+	padding: 10px 0;
+}
+	
+.fichas button {
+	white-space: nowrap;
+	border: 1px solid var(--bd);
+	background: var(--card);
+	border-radius: 99px;
+	padding: 6px 12px;
+}
+	
+.fichas button.on {
+	background: var(--ac);
+	color: #fff;
+	border-color: var(--ac);
+}
+
+.card {
+	background: var(--card);
+	border: 1px solid var(--bd);
+	border-radius: 12px;
+	padding: 12px;
+	margin: 8px 0;
+}
+	
+.row {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.row b {
+	flex: 1;
+}
+
+.tags span {
+	display: inline-block;
+	background: var(--ac2);
+	color: var(--ac);
+	border-radius: 99px;
+	padding: 1px 9px;
+	margin: 4px 4px 0 0;
+	font-size: .8rem
+}
+
+summary {
+	cursor: pointer;
+	color: var(--ac);
+	margin-top:8px
+}
+
+.lnk {
+	background: none;
+	border: 0;
+	color: var(--ac);
+	padding: 4px
+}
+
+.btn {
+	background: var(--ac);
+	color: #fff;
+	border: 0;
+	border-radius: 10px;
+	padding: 9px 14px;
+}
+
+.scroll {
+	overflow-x: auto;
+}
+
+table {
+	border-collapse: collapse;
+	font-size: .85rem;
+}
+
+th, td {
+	border: 1px solid var(--bd);
+	padding: 6px 8px;
+	vertical-align: top;
+	min-width: 140px;
+	text-align: left;
+	white-space: pre-wrap;
+}
+
+.top {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.imgs {
+	display: flex;
+	gap: 8px;
+	overflow-x: auto;
+	margin-top: 8px;
+}
+
+.imgs img {
+	height: auto;
+	max-height: 200px;
+	max-width: 100%;
+	border-radius: 10px;
+	border: 1px solid var(--bd);
+}
+
+#cuerpo {
+	position:relative;
+	width:260px;
+	max-width:100%;
+	height:440px;
+	margin:8px auto;
+}
+
+#cuerpo::before {
+	content:"";
+	position:absolute;
+	left:28%;
+	top:14%;
+	width:44%;
+	height:52%;
+	border:2px solid var(--bd);
+	border-radius:36px;
+}
+
+#cuerpo::after {
+	content:"";
+	position:absolute;
+	left:38%;
+	top:0;
+	width:24%;
+	height:13%;
+	border:2px solid var(--bd);
+	border-radius:50%
+}
+
+#cuerpo button {
+	position:absolute;
+	transform:translate(-50%,-50%);
+	width:48px;
+	height:48px;
+	padding:0;
+	font-size:1.6rem;
+	line-height:1;
+	background:var(--card);
+	border:2px solid var(--ac);
+	border-radius:50%;
+	cursor:pointer
+}
+
+#cuerpo button.on, #cuerpo button:hover {
+	background:var(--ac2);
+	transform:translate(-50%,-50%) scale(1.15)
+}
+
+.card {
+	--h:0;
+	--s:0%;
+	--l:45%;
+	border-left:6px solid hsl(var(--h) var(--s) var(--l));
+}
+
+.card.gp {
+	--h:275;
+	--s:55%;
+}
+
+.card.gn {
+	--h:350;
+	--s:70%;
+}
+
+.card.f-coco {
+	--l:30%
+}
+
+.card.f-bacilo {
+	--l:42%
+}
+
+.card.f-cocobacilo {
+	--l:54%
+}
+
+.card.f-espiro {
+	--l:66%
+}
+
+.tags span {
+	background:hsl(var(--h) var(--s) var(--l));
+	color:#fff
+}
+
+.nom {
+	text-align: center;
+}
+
+	</style>
+</head>
+
+<body>
+<main>
+	<div class="top">
+		<h1 style="flex:1">Atlas de Bacteriología I</h1>
+		<button class="btn" id="new" hidden>+ Nueva</button>
+	</div>
+
+	<input type="search" id="q" placeholder="Buscar especie...">
+	<details id="mapa">
+  <summary>Mapa del cuerpo</summary>
+  <div id="cuerpo">
+  <button data-z="cabeza" title="Cabeza y sistema nervioso" style="top: 7%; left: 50%;">🧠</button>
+  <button data-z="garganta" title="Garganta" style="top: 18%; left: 50%;">👄</button>
+  <button data-z="pulmones" title="Pulmones" style="top: 29%; left: 38%;">🫁</button>
+  <button data-z="corazon" title="Corazón" style="top: 29%; left: 62%;">🫀</button>
+  <button data-z="abdomen" title="Aparato digestivo" style="top: 42%; left: 50%;">🍽️</button>
+  <button data-z="urinario" title="Vías urinarias" style="top: 54%; left: 50%;">💧</button>
+  <button data-z="genital" title="Aparato genital" style="top: 64%; left: 50%;">🚻</button>
+  <button data-z="piel" title="Piel y tejidos blandos" style="top: 38%; left: 12%;">🖐️</button>
+  <button data-z="piel" title="Piel y tejidos blandos" style="top: 38%; left: 88%;">🖐️</button>
+  <button data-z="huesos" title="Huesos y articulaciones" style="top: 80%; left: 40%;">🦴</button>
+  <button data-z="huesos" title="Huesos y articulaciones" style="top: 80%; left: 60%;">🦴</button>
+  <button data-z="sangre" title="Sangre" style="top: 93%; left: 50%;">🩸</button>
+</div>
+  <div id="zres"></div>
+</details>
+	<div class="fichas" id="fichas"></div>
+	<div id="cmp"></div>
+	<div id="list"></div>
+<br>
+	<footer>
+  <p class="nom"><b>Santiago Díaz Efraín Shalom</b><br><br>
+Benemérita Universidad Autónoma de Puebla<br>
+Facultad de Ciencias Químicas<br>
+Licenciatura en Químico Farmacobiólogo</p>
+
+  <h4>Referencias</h4>
+  <ol>
+    <li>Murray, P. R., Rosenthal, K. S. y Pfaller, M. A. (2021). <i>Microbiología Médica</i> (9a. ed.). Elsevier.</li>
+    <li>Procop, G. W., Church, D. L., Hall, G. S., Janda, W. M., Koneman, E. W., Schreckenberger, P. C., Woods, G. L. (2017). <i>Koneman's Color Atlas and Textbook of Diagnostic Microbiology</i> (7a. ed.). Wolters Kluwer.</li>
+    <li>Clinical and Laboratory Standards Institute (2026). <i>CLSI M100 Performance Standards for Antimicrobial Susceptibility Testing.</i> (36a. ed.).</li>
+  </ol>
+</footer>
+</main>
+
+<script type="application/json" id="data">
+[
+	{
+		"especie": "Staphylococcus aureus",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Piel, Intestino, Sangre, Hueso, Corazón",
+		"transmision": "Endógena, Contacto",
+		"morfologiamicro": "Cocos grampositivos aerobios catalasa positivos agrupados en racimos.",
+		"virulencia": "Polisacáridos capsulares, biopelícula, adhesinas (Proteína A, FnBPA, FnBPB, Cna), peptidoglucanos, ácidos teicoicos y lipoteicoicos, enzimas (catalasa, coagulasa, fibrinolisinas, hialuronidasa, PLC, nucleasa, beta-lactamasas, hemolisinas, leucocidina P-V), toxinas (exfoliatinas, epidermolíticas, enterotoxinas, TSST-1, SAgs).",
+		"epidemiologia": "Cosmopolita. Coloniza fosas nasales, nasofaringe y piel. Provoca infecciones nosocomiales (MRSA).",
+		"clinico": "Síndrome estafilocóccico de piel escaldada (SSSS), impétigo buloso y no buloso, intoxicación alimentaria estafilocóccica, enterocolitis, síndrome de choque tóxico, púrpura fulminante, infecciones recurrentes, infecciones supurativas (pústulas, foliculitis, funúnculos, carbúnculos, infecciones en heridas), bacteremia y endocarditis, neumonía hematógena/necrotizante, empiema, osteomielitis, absceso de Brodie, artritis séptica.",
+		"identificacion": "Colonias grandes color dorado. Catalasa +. Coagulasa +. Agar cromógenico. DNasa +. Manitol +.",
+		"imagen": "s-aureus.jpeg, s-aureus-2.jpeg, s-aureus-3.jpeg"
+	},
+	{
+		"especie": "Staphylococcus epidermidis",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Piel, Sangre, Vías urinarias, Ojo, Corazón",
+		"transmision": "Contacto, Hematógena",
+		"morfologiamicro": "Cocos grampositivos aerobios catalasa positivos agrupados en racimos.",
+		"virulencia": "Macromoléculas adherentes, biopelícula (PIA), adhesinas (AltE, Ebp, Empb, Fbe, GehD), modulinas (PSM), bacteriocinas, proteasas, lipasas, beta-lactamasas.",
+		"epidemiologia": "Infecciones nosocomiales o por dispositivos médicos.",
+		"clinico": "Infecciones relacionadas a dispositivos médicos (prótesis, catéteres, sondas, diálisis), endocarditis, bacteremia, infecciones del tracto urinario, oculares, pediátricas, cutáneas.",
+		"identificacion": "Catalasa +. Polimixina B R. Novobiocina S. Manitol +.",
+		"imagen": "s-epidermidis.jpeg, s-epidermidis-2.jpeg"
+	},
+	{
+		"especie": "Staphylococcus saprophyticus",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Vías urinarias, Corazón",
+		"transmision": "Endógena, Contacto",
+		"morfologiamicro": "Cocos grampositivos aerobios catalasa positivos agrupados en racimos.",
+		"virulencia": "Adhesinas y enzimas catabólicas.",
+		"epidemiologia": "Infecciones de tracto urinario en mujeres jóvenes sexualmente activas. Contaminación rectal.",
+		"clinico": "Infecciones de tracto urinario alto y bajo (cistitis, pielonefritis, cálculos renales, uretritis, prostatitis) causando piuria, hematuria y disuria. Bacteremia, sepsis y endocarditis. Neumonía nosocomial.",
+		"identificacion": "Catalasa +. Polimixina B S. Novobiocina R. Manitol -.",
+		"imagen": "s-saprophyticus.jpeg, s-saprophyticus-2.jpeg"
+	},
+	{
+		"especie": "Streptococcus pyogenes (Grupo A)",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Piel, Garganta, Sangre",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Cocos grampositivos fastidiosos anaerobios facultativos capnofílicos catalasa y oxidasas negativos beta-hemolíticos agrupados en pares o cadenas.",
+		"virulencia": "Ácidos lipoteicos, cápsula (CrsS, CrsR), hialuronidasa, proteína M, proteína F, factor de opacidad (OF), estreptolisina S (SLS) y O, exotoxinas pirogénicas estreptocóccicas (SPE B, sistema génico CovR/S, SPE A, SPE C superantigénicas), desoxirribonucleasas, estreptocinasas",
+		"epidemiologia": "Colonizador de vías respiratorias. Se transmite por hacinamiento en invierno.",
+		"clinico": "Infecciones supurativas (Faringitis estreptocóccica, fiebre escarlatina, pioderma, erisipelas, celulitis, fascitis necrotizante, síndrome de choque tóxico estreptocóccico, bacteremia, sepsis puerperal) y no supurativas (fiebre reumática, glomerulonefritis aguda)",
+		"identificacion": "Serología antiestreptolisina O. Colonias pequeñas, incubación prolongada. Bacitracina S. PYR +.",
+		"imagen": "s-pyogenes.jpeg, s-pyogenes-2.jpeg, s-pyogenes-3.jpeg"
+	},
+	{
+		"especie": "Streptococcus agalactiae (Grupo B)",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Sangre, Sistema nervioso, Vías urinarias, Genitales, Hueso, Pulmones, Piel",
+		"transmision": "Endógena, Vertical, Contacto",
+		"morfologiamicro": "Cocos grampositivos fastidiosos anaerobios facultativos capnofílicos catalasa y oxidasas negativos beta-hemolíticos agrupados en pares o cadenas.",
+		"virulencia": "Cápsula de polisacáridos, ácido siálico, antígeno c, beta-hemolisina, ácido lipoteicoico, PBP1a, hialuronidasa.",
+		"epidemiologia": "Colonizador de tracto gastrointestinal y genitourinario. Transmisión vertical hacia neonatos. Embarazadas.",
+		"clinico": "Enfermedad neonatal aguda (bacteremia, neumonía o meningitis) y crónica (bacteremia con meningitis), infecciones en embarazadas (endometritis posparto, infección de heridas, tracto urinario), bacteremia, neumonía, infecciones de huesos y articulaciones, piel.",
+		"identificacion": "PCR. Medios selectivos. CAMP +. Hipurato +.",
+		"imagen": "s-agalactiae.jpeg, s-agalactiae-2.jpeg"
+	},
+	{
+		"especie": "Streptococcus pneumoniae",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Pulmones, Ojo, Sangre, Sistema nervioso",
+		"transmision": "Inhalación, Endógena",
+		"morfologiamicro": "Diplococos encapsulados grampositivos fastidiosos anaerobios facultativos capnofílicos catalasa negativos.",
+		"virulencia": "Pneumolisina. Cápsula de polisacáridos, polisacárido C, antígeno F, fosforilcolina, neuraminidasas (NanA, NanB), adhesinas de superficie, proteasa IgAs, ácido teicoico y lipoteicoico, peptidoglucano, peróxido de hidrógeno, serinproteasa PrtA, PspA.",
+		"epidemiologia": "Colonizador de garganta y nasofaringe en niños y ancianos. La infección ocurre tras la diseminación a pulmón, senos nasales, orejas o meninges.",
+		"clinico": "Neumonía lobular, pleurisía, sinusitis y otitis media, meningitis pneumocóccica, bacteremia.",
+		"identificacion": "Colonias mucoides alfa- (aeróbicamente) o beta-hemolíticas (anaeróbicamente). Test de Quellung +. Serología del polisacárido C +. PCR. Solubilidad en bilis +. Optoquina S. SXT S",
+		"imagen": "s-pneumoniae.jpeg, s-pneumoniae-2.jpeg, s-pneumoniae-3.jpeg"
+	},
+	{
+		"especie": "Enterococcus faecalis (Grupo D)",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Vías urinarias, Sangre, Corazón",
+		"transmision": "Endógena",
+		"morfologiamicro": "Cocos grampositivos capnófilos catalasa negativos agrupados en pares o cadenas.",
+		"virulencia": "Biopelículas (proteínas de superficie Esp, Ace y Acm, glucolípidos de membrana, gelatinasa GelE, pili), resistencia inherente y adquirida, hemolisina, serinproteasa extracelular (SprE), polisacárido capsular (Epa), ácido lipoteicoico.",
+		"epidemiologia": "Bacterias entéricas del intestino grueso y tracto urinario. Los factores de riesgo son los catéteres urinarios o intravasculares, hospitalización prolongada y antibióticos de amplio espectro, VRE (Enterococos resistentes a vancomicina).",
+		"clinico": "Infecciones nosocomiales, tracto urinario (cistitis, pielonefritis), peritoneales, bacteremia y endocarditis.",
+		"identificacion": "Crecimiento de 10 a 45 °C, en altas concentraciones de NaCl y sales biliares, y a pH 9.6. PYR +. Hidrólisis de esculina. Catalasa débil. Hipurato +.",
+		"imagen": "e-faecalis.jpeg, e-faecalis-2.jpeg, e-faecalis-3.jpeg"
+	},
+	{
+		"especie": "Enterococcus faecium (Grupo D)",
+		"gram": "Gram +",
+		"forma": "Cocos",
+		"sitio": "Vías urinarias, Sangre, Corazón",
+		"transmision": "Endógena",
+		"morfologiamicro": "Cocos grampositivos capnófilos catalasa negativos agrupados en pares o cadenas.",
+		"virulencia": "Biopelículas (proteínas de superficie Esp, Ace y Acm, glucolípidos de membrana, gelatinasa GelE, pili), resistencia inherente y adquirida, serinproteasa extracelular (SprE).",
+		"epidemiologia": "Bacterias entéricas del intestino grueso y tracto urinario. Los factores de riesgo son los catéteres urinarios o intravasculares, hospitalización prolongada y antibióticos de amplio espectro, VRE (Enterococos resistentes a vancomicina).",
+		"clinico": "Infecciones nosocomiales, tracto urinario (cistitis, pielonefritis), peritoneales, bacteremia y endocarditis.",
+		"identificacion": "Crecimiento de 10 a 45 °C, en altas concentraciones de NaCl y sales biliares, y a pH 9.6. PYR +. Hidrólisis de esculina. Catalasa débil. Arabinosa +.",
+		"imagen": "e-faecium.jpeg, e-faecium-2.jpeg"
+	},
+	{
+		"especie": "Bacillus anthracis",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Sangre, Piel, Intestino, Garganta, Pulmones",
+		"transmision": "Inhalación, Contacto, Ingestión",
+		"morfologiamicro": "Bacilos grampositivos largos y delgados aerobios catalasa positivos formadores de esporas agrupados en pares o cadenas.",
+		"virulencia": "Plásmido pX01 (antígeno protector PA formador de poros, factor edematizante EF adenilato ciclasa, factor letal LF MAP proteolítico) formando toxinas edematizante (PA + EF) y letal (PA + LF), plásmido pX02 (cápsula de polipéptidos).",
+		"epidemiologia": "El ántrax es una enfermedad de herbívoros. Se expandió a humanos por bioterrorismo.",
+		"clinico": "Ántrax cutáneo, gastrointestinal, orofaríngeo, por inhalación, por inyección.",
+		"identificacion": "Endosporas (verde de malaquita), cápsula (negativa), colonias grandes transparentes irregulares mucoides en cabeza de Medusa. No hemolítico. Inmóvil. PCR. Susceptibilidad a gamma-bacteriófago. ELISA.",
+		"imagen": "b-anthracis.jpeg, b-anthracis-2.jpeg, b-anthracis-3.jpeg"
+	},
+	{
+		"especie": "Bacillus cereus",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Ojo, Sangre, Pulmones, Piel, Hueso, Corazón",
+		"transmision": "Alimentos contaminados, Ingestión, Contacto",
+		"morfologiamicro": "Bacilos grampositivos largos y delgados mesófilos aerobios catalasa positivos formadores de esporas agrupados en pares o cadenas.",
+		"virulencia": "Enterotoxinas termoestable (emética) y termolábil (diarreica), toxina necrótica, hemolisinas (cereolisina, II y III), fosfolipasas (fosfatidilinositol hidrolasa, fosfatidilcolina hidrolasa, esfingomielinasa), beta-lactamasas, colagenasas extracelulares, proteasas membranales.",
+		"epidemiologia": "Cosmopolita. Menos virulento. Contaminación medioambiental. Colonización transiente de piel.",
+		"clinico": "Intoxicación alimentaria emética (arroz contaminado) o diarreica. Infecciones oculares por trauma. Infecciones por dispositivos médicos. Endocarditis, meningitis, neumonía, bacteremia, infecciones de piel y huesos, nosocomiales.",
+		"identificacion": "Alimentos contaminados. Colonias grandes mates butirosas. Beta-hemólisis. Móvil (flagelos perítricos antígeno H). Arginina dihidrolasa +.",
+		"imagen": "b-cereus.jpeg, b-cereus-2.jpeg, b-cereus-3.jpeg"
+	},
+	{
+		"especie": "Listeria monocytogenes",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Sistema nervioso, Sangre",
+		"transmision": "Alimentos contaminados, Ingestión, Vertical",
+		"morfologiamicro": "Bacilos grampositivos cortos y rectos móviles anaerobios facultativos beta-hemolíticos agrupados en pares o cadenas.",
+		"virulencia": "Adhesinas (internalinas InlA, InlB), listeriolisina O, PLC, ActA, gen prfA (factor regulador positivo).",
+		"epidemiologia": "Patógeno intracelular facultativo. Aislado del ambiente y las heces de animales. Consumo de comida contaminada. Transmisión vertical.",
+		"clinico": "Infección neonatal aguda y crónica, granulomatosis infantiséptica, infecciones en embarazadas, meningitis, bacteremia.",
+		"identificacion": "Colonias grises pequeñas en enriquecimiento en frío. Beta-hemólisis. Móvil. MALDI-TOF. CAMP +.",
+		"imagen": "l-monocytogenes.jpeg, l-monocytogenes-2.jpeg, l-monocytogenes-3.jpeg"
+	},
+	{
+		"especie": "Corynebacterium diphtheriae",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Garganta, Piel",
+		"transmision": "Inhalación, Contacto.",
+		"morfologiamicro": "Bacilos grampositivos aerobios inmóviles catalasa positivos pleomórficos agrupados en cadenas cortas y en letras chinas.",
+		"virulencia": "Ácidos micólicos de cadena corta, toxina diftérica (fago beta, exotoxina A-B) regulada por DTxR. Ácido diaminopimélico.",
+		"epidemiologia": "Cosmopolita. Colonizadores de piel, tracto respiratorio superior, gastrointestinal y urogenital. Enfermedad pediátrica.",
+		"clinico": "Difteria respiratoria (faringitis exudativa, pseudomembrana, neurotoxicidad), cutánea (úlcera crónica, ectima difterítico).",
+		"identificacion": "Clínica. Telurita +. Cisteinasa +. Toxina diftérica (Prueba de Elek). PCR. Gránulos metacromáticos. Ureasa -.",
+		"imagen": "c-diphteriae.jpeg, c-diphteriae-2.jpeg, c-diphteriae-3.jpeg"
+	},
+	{
+		"especie": "Mycobacterium tuberculosis",
+		"gram": "",
+		"forma": "Bacilos",
+		"sitio": "Pulmones",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Bacilos inmóviles aerobios ácido-alcohol resistentes.",
+		"virulencia": "Ácidos micólicos de cadena larga. Pared rica en lípidos. Inhibición fusión del fagolisosoma.",
+		"epidemiologia": "Patógeno intracelular. Resistencia antimicrobiana. Factores de riesgo, como VIH, infancia, inmunosupresión, inmunodepresión, bypass, desnutrición, fumar.",
+		"clinico": "Tuberculosis (Enfermedad cavitaria, diseminada).",
+		"identificacion": "Crecimiento lento en medios selectivos (LJ). Derivados de proteína purificada (PPDs) para prueba IDR de tuberculina. Colonias traslúcidas. Radiografía. IFN-gamma. Ziehl-Neelsen. PCR. Cromatografía. Niacina +. Reducción de nitratos. Catalasa -.",
+		"imagen": "m-tuberculosis.jpeg, m-tuberculosis-2.jpeg, m-tuberculosis-3.jpeg"
+	},
+	{
+		"especie": "Mycobacterium leprae",
+		"gram": "",
+		"forma": "Bacilos",
+		"sitio": "Piel",
+		"transmision": "Contacto, Inhalación",
+		"morfologiamicro": "Bacilos inmóviles aerobios ácido-alcohol resistentes.",
+		"virulencia": "Ácidos micólicos de cadena larga. Pared rica en lípidos.",
+		"epidemiologia": "Patógeno intracelular. Prevalencia en decaída.",
+		"clinico": "Lepra tuberculoide (enfermedad paucibacilar de Hansen) y lepromatosa (enfermedad multibacilar de Hansen).",
+		"identificacion": "Crecimiento lento. Derivados de proteína purificada (PPDs). Colonias traslúcidas.",
+		"imagen": "m-leprae.jpeg"
+	},
+	{
+		"especie": "Neisseria gonorrhoeae",
+		"gram": "Gram -",
+		"forma": "Cocos",
+		"sitio": "Genitales, Ojo, Garganta, Sangre, Hueso, Corazón",
+		"transmision": "Sexual",
+		"morfologiamicro": "Diplococos gramnegativos oxidasa y catalasa positivos en forma de granos de café.",
+		"virulencia": "Pilinas, porina (PorB), proteínas Opa, Rmp, proteínas de unión a transferrina, hemoglobina y lactoferrina, LOS, proyecciones de membrana exterior, IgA1 proteasa, beta-lactamasa.",
+		"epidemiologia": "Agente etiológico de gonorrea, segunda enfermedad de transmisión sexual más común. Portadores asintomáticos.",
+		"clinico": "Gonorrea (infección uretral, endocervical, salpingal, conjuntivitis, anorrectal, faríngea, oftalmía neonatal), gonococcemia (septicemia, artritis purulenta, endocarditis), síndrome de Hugh-Curtis.",
+		"identificacion": "Crecimiento en TM y chocolate en atmósfera húmeda con CO2. Tinción directa. Oxidación de carbohidratos. MALDI-TOF. Superoxol +. Actividad enzimática.",
+		"imagen": "n-gonorrhoeae.jpeg, n-gonorrhoeae-2.jpeg, n-gonorrhoeae-3.jpeg, n-gonorrhoeae-4.jpeg"
+	},
+	{
+		"especie": "Neisseria meningitidis",
+		"gram": "Gram -",
+		"forma": "Cocos",
+		"sitio": "Sistema nervioso, Sangre, Pulmones, Piel, Ojo, Vías urinarias",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Diplococos gramnegativos oxidasa y catalasa positivos en forma de granos de café.",
+		"virulencia": "Cambio de serotipo de cápsula de polisacáridos, pilinas (PilC, PilQ), proteínas de membrana exterior (PorA, PorB, Opa, Opc), Rmp, proteínas de unión a transferrina (TbpAB), hemoglobina (HmbR) y lactoferrina (LbpAB), LOS, proyecciones de membrana exterior, IgA1 proteasa.",
+		"epidemiologia": "Colonizador de nasofaringe y orofaringe. Provoca una variedad de enfermedades leves y fatales.",
+		"clinico": "Meningitis, meningococcemia, bronconeumonía, choque meningocóccico fulminante, meningoencefalitis, púrpura fulminante, síndrome de Waterhouse-Friedrichsen, artritis séptica, conjuntivitis meningocóccica aguda, neumonía, tracto genitourinario.",
+		"identificacion": "Crecimiento en TM y chocolate. Tinción directa. Colonias grandes mucoides. Maltosa +. Actividad enzimática.",
+		"imagen": "n-meningitidis.jpeg, n-meningitidis-2.jpeg, n-meningitidis-3.jpeg, n-meningitidis-4.jpeg"
+	},
+	{
+		"especie": "Haemophilus influenzae",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sistema nervioso, Garganta, Hueso, Oído, Sangre, Ojo, Pulmones, Corazón",
+		"transmision": "Endógena",
+		"morfologiamicro": "Cocobacilos gramnegativos fastidiosos pequeños anaerobios facultativos pleomórficos.",
+		"virulencia": "Cápsula de polisacáridos, pili, adhesinas, LPS (lípido A), fosfato de polirribitol (PRP), proteasas IgA1. Serotipo b.",
+		"epidemiologia": "Colonización del tracto respiratorio superior. Provoca enfermedades en niños no vacunados.",
+		"clinico": "Meningitis, epiglotitis, celulitis, artritis, otitis media, sinusitis, bronquitis crónica, neumonía, bacteremia, endocarditis, infecciones neonatales, oculares, fiebre purpúrica.",
+		"identificacion": "Crecimiento capnofílico en medios suplementados con factores X (hemina) y V (NAD). Serología PRP (Ag capsular tipo b). Colonias pequeñas y opacas. Fenómeno de satelitismo.",
+		"imagen": "h-influenzae.jpeg, h-influenzae-2.jpeg, h-influenzae-3.jpeg"
+	},
+	{
+		"especie": "Aggregatibacter actinomycetemcomitans",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sangre, Corazón",
+		"transmision": "Hematógena",
+		"morfologiamicro": "Cocobacilos gramnegativos.",
+		"virulencia": "LPS, leucotoxina.",
+		"epidemiologia": "Colonización de boca. Diseminación hacia la sangre.",
+		"clinico": "Endocarditis subaguda por válvulas dañadas o artificiales, enfermedad periodontal agresiva, síndrome de Papillon-Lefevre, coinfección actinomicótica.",
+		"identificacion": "Colonias pequeñas adherentes irregulares. Catalasa +. ONPG -. Sacarosa -. Lactosa -. Crecimiento lento en agar sangre y chocolate. Reducción de nitratos.",
+		"imagen": "a-actinomycetemcomitans.jpeg, a-actinomycetemcomitans-2.jpeg, a-actinomycetemcomitans-3.jpeg"
+	},
+	{
+		"especie": "Pasteurella multocida",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Pulmones",
+		"transmision": "Zoonosis",
+		"morfologiamicro": "Cocobacilos gramnegativos pequeños anaerobios facultativos fermentadores.",
+		"virulencia": "Cápsula de polisacáridos y ácido hialurónico.",
+		"epidemiologia": "Colonización del tracto respiratorio en animales y de la nasofaringe en personas con contacto con animales.",
+		"clinico": "Celulitis, linfadenitis, enfermedad respiratoria, infección sistémica, de heridas.",
+		"identificacion": "Colonias grises grandes butirosas en agar sangre en atmósfera capnofílica. Indol +. Inmóvil. Oxidasa +. Catalasa +. Ornitina descarboxilasa +. Glucosa +. Sacarosa +. Manitol +.",
+		"imagen": "p-multocida.jpeg, p-multocida-2.jpeg, p-multocida-3.jpeg, p-multocida-4.jpeg"
+	},
+	{
+		"especie": "Escherichia coli enterotoxigénica",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, adhesinas (antígenos del factor de colonización CFA/I, CFA/II y CFA/III) y exotoxinas (toxinas termolábil LT-1 y termoestable STa).",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Se vuelve patógeno al adquirir genes virulentos en plásmidos y bacteriófagos. Una de las mayores causas de diarrea bacteriana.",
+		"clinico": "Diarrea del viajero, infantil, acuosa, vómito, cólicos, náuseas, fiebre leve. Diarrea secretora. Septicemia.",
+		"identificacion": "Lactosa +. ELISA. PCR. Brillo metálico en EMB. Indol +. MR +. VP -. Citrato -.",
+		"imagen": "e-coli.jpeg, e-coli-2.jpeg"
+	},
+	{
+		"especie": "Escherichia coli enterohemorrágica",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia. O157:H7. Adhesinas (BFP, intimina) y exotoxinas (toxinas Shiga Stx1, Stx2), LEE.",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Se vuelve patógeno al adquirir genes virulentos en plásmidos y bacteriófagos. Ingestión de menos de 100 bacterias.",
+		"clinico": "Diarrea acuosa, colitis hemorrágica, cólicos abdominales, fiebre leve, síndrome urémico hemolítico.",
+		"identificacion": "Lactosa +. Serotipificación. ELISA. PCR. Sorbitol -. Brillo metálico en EMB. Indol +. MR +. VP -. Citrato -.",
+		"imagen": "e-coli-3.jpeg"
+	},
+	{
+		"especie": "Escherichia coli enteropatogénica",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili (BFP) sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, T3SS, intimina, cocopedestales, LEE, plásmido del factor de adherencia (EAF).",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Se vuelve patógeno al adquirir genes virulentos en plásmidos y bacteriófagos.",
+		"clinico": "Diarrea infantil, acuosa, vómito. Septicemia.",
+		"identificacion": "Lactosa +. Brillo metálico en EMB. Indol +. MR +. VP -. Citrato -.",
+		"imagen": "e-coli-4.jpeg"
+	},
+	{
+		"especie": "Escherichia coli uropatogénica",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Vías urinarias",
+		"transmision": "Endógena",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias Dr y pili P sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, adhesinas (AAF/I, AAF/III), hemolisina (HlyA).",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Se vuelve patógeno al adquirir genes virulentos en plásmidos y bacteriófagos. Diseminación endógena. Responsable por la mayoría de infecciones del tracto urinario.",
+		"clinico": "Infecciones del tracto urinario.",
+		"identificacion": "Lactosa +. Brillo metálico en EMB. Indol +. MR +. VP -. Citrato -.",
+		"imagen": "e-coli-5.jpeg"
+	},
+	{
+		"especie": "Escherichia coli neonato-meníngea",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Sistema nervioso",
+		"transmision": "Hematógena",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, antígeno capsular K1.",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Se vuelve patógeno al adquirir genes virulentos en plásmidos y bacteriófagos. Diseminación endógena. Neonatos.",
+		"clinico": "Meningitis.",
+		"identificacion": "Lactosa +. Brillo metálico en EMB. Indol +. MR +. VP -. Citrato -.",
+		"imagen": "e-coli-6.jpeg"
+	},
+	{
+		"especie": "Salmonella enterica Typhi",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, isla de patogenicidad I (Ssps, T3SS) y II (evasión inmune), antígeno capsular Vi.",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano. Alimentos contaminados (pollo, huevo, lácteos). Dosis infectiva baja. Infección autolimitante.",
+		"clinico": "Gastroenteritis (náusea, vómito, diarrea acuosa), bacteremia, infecciones supurativas focales, fiebre tifoidea, colonización crónica.",
+		"identificacion": "Lactosa -. H2S +. Lisina descarboxilasa +. Indol -. MR +. VP -. Citrato +. Sacarosa -. Ornitina descarboxilasa -. Gas -. Medios selectivos, diferenciales y cromogénicos. PCR. MALDI-TOF.",
+		"imagen": "s-enterica.jpeg, s-enterica-2.jpeg"
+	},
+	{
+		"especie": "Salmonella enterica Paratyphi",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, isla de patogenicidad I (Ssps, T3SS) y II (evasión inmune).",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano. Alimentos contaminados (pollo, huevo, lácteos).",
+		"clinico": "Gastroenteritis (náusea, vómito, diarrea acuosa), bacteremia, infecciones supurativas, fiebre paratifoidea, colonización crónica.",
+		"identificacion": "Lactosa -. H2S +. Lisina descarboxilasa +. Indol -. MR +. VP -. Citrato +. Medios selectivos, diferenciales y cromogénicos. PCR. MALDI-TOF.",
+		"imagen": "s-enterica-3.jpeg, s-enterica-4.jpeg"
+	},
+	{
+		"especie": "Salmonella enterica Choleraesuis",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, isla de patogenicidad I (Ssps, T3SS) y II (evasión inmune).",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Reservorio animal. Alimentos contaminados (pollo, huevo, lácteos).",
+		"clinico": "Gastroenteritis (náusea, vómito, diarrea acuosa), bacteremia, infecciones supurativas, colonización crónica.",
+		"identificacion": "Lactosa -. H2S +. Lisina descarboxilasa +. Indol -. MR +. VP -. Citrato +. Medios selectivos, diferenciales y cromogénicos. PCR. MALDI-TOF.",
+		"imagen": "s-enterica-5.jpeg"
+	},
+	{
+		"especie": "Klebsiella pneumoniae",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Pulmones",
+		"transmision": "Inhalación, Contacto",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia (beta-lactamasa, carbapenemasa), antígeno K.",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas. Variante hipervirulenta hvKP.",
+		"clinico": "Neumonía lobular nosocomial o de la comunidad (necrosis alveolar, cavidades, hemoptisis), rinoescleroma (subsp. rhinoscleromatis), rinitis atrófica o ozena (subsp. ozaenae).",
+		"identificacion": "Lactosa +. Colonias grandes moradas mucoides. Ornitina descarboxilasa -. VP +. Gas ++. Inmóvil. Indol -. Medios cromogénicos."
+	},
+	{
+		"especie": "Shigella dysenteriae (Grupo A)",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, T3SS, IpaA, IpaB, IpaC, IpaD, toxina Shiga (inhibición síntesis proteica).",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano. Replicación en citoplasma de células huésped, permitiendo la propagación de célula a célula. Induce la apoptosis. 100-200 bacterias. Higiene pobre. Epidemias periódicas.",
+		"clinico": "Síndrome hemolítico urémico, shigelosis autolimitante (cólicos abdominales, diarrea acuosa, fiebre, diarrea sanguinolenta, tenesmo, pus), disentería bacilar.",
+		"identificacion": "Lactosa -. Ornitina descarboxilasa -. Inmóvil. Gas -. Manitol -. Catalasa -."
+	},
+	{
+		"especie": "Shigella flexneri (Grupo B)",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, T3SS, IpaA, IpaB, IpaC, IpaD, toxina Shiga (inhibición síntesis proteica).",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano.  Replicación en citoplasma de células huésped, permitiendo la propagación de célula a célula. Induce la apoptosis. 100-200 bacterias. Higiene pobre. Países en desarrollo.",
+		"clinico": "Síndrome hemolítico urémico, shigelosis autolimitante (cólicos abdominales, diarrea acuosa, fiebre, diarrea sanguinolenta, tenesmo, pus).",
+		"identificacion": "Lactosa -. Ornitina descarboxilasa -. Inmóvil. Gas -."
+	},
+	{
+		"especie": "Shigella boydii (Grupo C)",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, T3SS, IpaA, IpaB, IpaC, IpaD, toxina Shiga (inhibición síntesis proteica).",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano. Replicación en citoplasma de células huésped, permitiendo la propagación de célula a célula. Induce la apoptosis. 100-200 bacterias. Higiene pobre.",
+		"clinico": "Síndrome hemolítico urémico, shigelosis autolimitante (cólicos abdominales, diarrea acuosa, fiebre, diarrea sanguinolenta, tenesmo, pus).",
+		"identificacion": "Lactosa -. Ornitina descarboxilasa -. Inmóvil. Gas -."
+	},
+	{
+		"especie": "Shigella sonnei (Grupo D)",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión, Heces",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia, T3SS, IpaA, IpaB, IpaC, IpaD, toxina Shiga (inhibición síntesis proteica).",
+		"epidemiologia": "Cosmopolita. Patógeno. Transmisión de humano a humano. Replicación en citoplasma de células huésped, permitiendo la propagación de célula a célula. Induce la apoptosis. 100-200 bacterias. Higiene pobre. Zonas urbanas.",
+		"clinico": "Síndrome hemolítico urémico, shigelosis autolimitante (cólicos abdominales, diarrea acuosa, fiebre, diarrea sanguinolenta, tenesmo, pus).",
+		"identificacion": "Lactosa -. Ornitina descarboxilasa +. Inmóvil. Gas -. Beta-galactosidasa +."
+	},
+	{
+		"especie": "Proteus mirabilis",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Vías urinarias, Piel",
+		"transmision": "Endógena, Contacto",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia.",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas.",
+		"clinico": "Infecciones del tracto urinario (cistitis, pielonefritis), cálculos renales (incremento de pH en orina), infecciones de heridas.",
+		"identificacion": "Lactosa -. Ureasa +. Swarming. Fenilalanina desaminasa +. H2S +. Indol -. Ornitina descarboxilasa +.",
+		"imagen": "p-mirabilis.jpeg"
+	},
+	{
+		"especie": "Proteus vulgaris",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Vías urinarias",
+		"transmision": "Endógena",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia (cefalosporinas y penicilinas).",
+		"epidemiologia": "Cosmopolita. Parte de la microbiota entérica. Infecciones oportunistas en pacientes inmunosuprimidos (antibióticos).",
+		"clinico": "Infecciones del tracto urinario (cistitis, pielonefritis), cálculos renales (incremento de pH en orina).",
+		"identificacion": "Lactosa -. Ureasa +. Swarming. Fenilalanina desaminasa +. H2S +. Indol +. Ornitina descarboxilasa -.",
+		"imagen": "p-vulgaris.jpeg"
+	},
+	{
+		"especie": "Citrobacter freundii",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia.",
+		"epidemiologia": "Cosmopolita. Asociado con el queso Brie.",
+		"clinico": "Posible causa de diarrea e infecciones extraintestinales.",
+		"identificacion": "Lactosa +. Lisina descarboxilasa -. Indol -. MR +. VP +. Citrato +. H2S +. Adonitol -. Malonato -. Crecimiento en KCN +. ONPG +."
+	},
+	{
+		"especie": "Enterobacter cloacae",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Vías urinarias, Sangre, Piel",
+		"transmision": "Inhalación, Contacto, Endógena",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia (beta-lactamasa inducible).",
+		"epidemiologia": "Cosmopolita. Agua, drenaje, suelo, vegetales. Microbiota entérica. Infecciones oportunistas.",
+		"clinico": "Infecciones del tracto urinario, respiratorio, heridas, septicemia y meningitis.",
+		"identificacion": "Lactosa +. Ornitina descarboxilasa +. Gas ++. VP +. Móvil.",
+		"imagen": "e-cloacae.jpeg, e-cloacae-2.jpeg"
+	},
+	{
+		"especie": "Serratia marcescens",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Pulmones, Sangre",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Bacilos gramnegativos fermentadores anaerobios facultativos catalasa positivos y oxidasa negativos.",
+		"virulencia": "Antígeno enterobacteriano común (polisacárido O), LPS (lípido A), proteínas H (flagelos perítricos), fimbrias y pili sexual, variación de fase antigénica, sideróforos, inhibición del complemento, resistencia (beta-lactamasa inducible, colistina, cefalotina), enzimas hidrolíticas (lipasa, gelatinasa, DNasa)",
+		"epidemiologia": "Cosmopolita. Pacientes en tratamiento quimioterapéutico. Oportunista nosocomial.",
+		"clinico": "Neumonía, septicemia.",
+		"identificacion": "Lactosa -. DNasa +. Gelatina +. L-arabinosa -. Producción de pigmento rojo. VP +.",
+		"imagen": "s-marcescens.jpeg"
+	},
+	{
+		"especie": "Vibrio cholerae",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos curvos gramnegativos anaerobios facultativos fermentadores oxidasa positivos con flagelos polares.",
+		"virulencia": "Flagelos polares, pili (TCP en VPI-1), LPS (polisacárido O, polisacárido core, lípido A), toxina del cólera (O1 El-Tor, O139 Bengal, bacteriófago CTX-phi), proteína quimiotáctica (adhesina), enterotoxina accesoria del cólera (secreción), toxina de la zónula occludens (permeabilidad), neuraminidasa.",
+		"epidemiologia": "Cosmopolitas en ambientes marinos. Consumo de mariscos. Pobre higiene. Susceptibles al ácido estomacal. Se requieren inóculos grandes. Epidemias por O1, O139 (unión a GM1 intestinal). ",
+		"clinico": "Gastroenteritis autolimitante, cólera (diarrea fatal color agua de arroz, deshidratación, calambres, acidosis metabólica, hipocalemia, choque hipovolémico, arritmia, fallo renal), bacteremia.",
+		"identificacion": "Crecimiento de 14 a 40 °C. Halófilos. Crecimiento en TCBS (colonias amarillas). ELISA. PCR. Colonias grises cremosas adherentes.",
+		"imagen": "v-cholerae.jpeg, v-cholerae-2.jpeg"
+	},
+	{
+		"especie": "Pseudomonas aeruginosa",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Piel, Pulmones, Hueso, Vías urinarias, Sistema nervioso, Sangre, Corazón",
+		"transmision": "Contacto, Inhalación",
+		"morfologiamicro": "Bacilos rectos o curvados gramnegativos mótiles aerobios no fermentadores oxidasa positivos agrupados en pares.",
+		"epidemiologia": "Patógeno oportunista. Presente en suelo, materia orgánica, vegetación y agua, así como en hospitales, flores, lavabos, baños, etc. Alta versatilidad de crecimiento. Resistencia intrínseca, adquirida y adaptativa.",
+		"virulencia": "Cápsula de polisacáridos (alginato), adhesinas (flagelos, pili, LPS, alginato), toxinas (exotoxina A ETA), enzimas (piocianina, pioverdina, LasA, LasB, proteasa alcalina, PLC, exoenzimas S y T, leucocidina, neuraminidasa), T3SS.",
+		"clinico": "Infecciones pulmonares (asintomáticas, traqueobronquitis, ectima gangrenoso, bronconeumonía necrotizante) por antibióticos o ventilación mecánica, infecciones en heridas, foliculitis, osteocondritis, infecciones del tracto urinario (catéteres), otitis externa (oreja de nadador, maligna), media crónica, úlceras corneales, bacteremia, endocarditis.",
+		"identificacion": "Producción de pigmentos (piocianina, pioverdina, piorrubina, piomelanina) fluorescentes o brillo metálico. Beta-hemólisis. Olor característico. Colonias grises grandes mucoides. Lactosa -. Crecimiento a 42 °C. Alcalinización de acetamida. Desnitrificación. Móvil (flagelo monótrico).",
+		"imagen": "p-aeruginosa.jpeg, p-aeruginosa-2.jpeg, p-aeruginosa-3.jpeg, p-aeruginosa-4.jpeg, p-aeruginosa-5.jpeg"
+	},
+	{
+		"especie": "Acinetobacter baumannii",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Vías urinarias, Pulmones, Piel, Ojo, Sangre, Corazón",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Cocobacilos gramnegativos inmóviles aerobios estrictos oxidasa negativos agrupados en pares.",
+		"virulencia": "Resistencia a penicilina, carbapenemes y colistina.",
+		"epidemiologia": "Saprófitos. Colonización de ventiladores mecánicos y piel en hospitales. Parte de la microbiota orofaríngea. Patógenos oportunistas nosocomiales (antibióticos de amplio espectro o ventilación).",
+		"clinico": "Infecciones del tracto urinario, respiratorio (neumonía relacionada a tubos endotraqueales y traqueostomías), heridas, endocarditis, meningitis, peritonitis (diálisis), conjuntivitis, osteomielitis, sinovitis.",
+		"identificacion": "Oxidación de glucosa +. Sacarosa +. Producción rápida de ácido a partir de lactosa 10% y glucosa.",
+		"imagen": "a-baumannii.jpeg, a-baumannii-2.jpeg, a-baumannii-3.jpeg"
+	},
+	{
+		"especie": "Helicobacter pylori",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Estómago",
+		"transmision": "Heces",
+		"morfologiamicro": "Bacilos móviles microaerófilos no fermentadores ni oxidativos de carbohidratos en forma de espiral.",
+		"virulencia": "Flagelos polares, ureasa (supervivencia en estómago), LPS (lípido A, oligosacárido core y cadena lateral O, mimetismo molecular), proteína inhibidora de ácido, mucinasa, PL, citotoxina vacuolizante (VacA), gen asociado a citotoxina cagA (T4SS, PAI).",
+		"epidemiologia": "Reservorios humanos, primates y porcinos. Colonizador del estómago. Protección contra GERD y adenocarcinoma del esófago bajo y cardia.",
+		"clinico": "Gastritis tipo B (saciedad, náusea, vómito, hipoclorhidria), gastritis antral crónica, úlcera péptica gástrica o duodenal, adenocarcinoma gástrico, linfomas de células B en MALT.",
+		"identificacion": "Ureasa ++. Catalasa +. Oxidasa +. Crecimiento lento en medios enriquecidos en condiciones microaerófilas y húmedas. Biopsia. Prueba de urea en aliento. ELISA. MALDI-TOF. Serología IgM, IgA, IgG. Colonias pequeñas traslúcidas beta-hemolíticas.",
+		"imagen": "h-pylori.jpeg"
+	},
+	{
+		"especie": "Campylobacter jejuni",
+		"gram": "Gram -",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre, Hueso",
+		"transmision": "Zoonosis",
+		"morfologiamicro": "Bacilos móviles microaerófilos no fermentadores ni oxidativos de carbohidratos con forma de coma.",
+		"virulencia": "Cápsula de polisacáridos, LOS, reactividad antigénica cruzada con gangliósidos en nervios periféricos. Flagelo polar monótrico.",
+		"epidemiologia": "Cosmopolita. Mayor causa de gastroenteritis en países desarrollados y en vías de desarrollo. Reservorio en pollos, bovinos y ovejas. Gravedad determinada por dosis infectiva. Susceptible a ácidos estomacales. Infección zoonótica en niños.",
+		"clinico": "Gastroenteritis en yeyuno, íleon y colon autolimitante, septicemia, síndrome de Guillain-Barré (O:19), artritis reactiva, bacteremia.",
+		"identificacion": "Crecimiento lento microaerófilo a 42 °C en medios selectivo. Filtración por membrana. Catalasa +. Oxidasa +. MALDI-TOF. Hipurato +. PCR.",
+		"imagen": "c-jejuni.jpeg, c-jejuni-2.jpeg, c-jejuni-3.jpeg"
+	},
+	{
+		"especie": "Brucella melitensis",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sangre, Pulmones, Hueso, Piel",
+		"transmision": "Contacto, Ingestión, Inhalación, Zoonosis",
+		"morfologiamicro": "Cocobacilos pequeños inmóviles fastidiosos aerobios estrictos no fermentadores.",
+		"virulencia": "S-LPS (cadena O, antígenos B y M), enzimas (SOD, catalasa, peroxidasa), BvsR y BvsS (quorum sensing), glucanos periplásmicos osmorregulados (OPGs), virB (T4SS).",
+		"epidemiologia": "Enfermedad aguda grave con complicaciones. Parásito intracelular del sistema reticuloendotelial. Cosmopolita. Reservorio en cabras y ovejas. Tejido rico en eritritol. Endémica en México. Riesgo en laboratorios.",
+		"clinico": "Brucelosis (escalofríos, sudoración, fatiga, debilidad, mialgia, pérdida de peso, artralgia, tos no productiva), enfermedad de Bang, fiebre ondulante, síntomas gastrointestinales, osteolíticos, tracto respiratorio, cutáneos, neurológicos, cardiovasculares. Infecciones crónicas.",
+		"identificacion": "Crecimiento capnofílico lento en medios complejos. Colonias lisas (traslúcidas y homogéneas, más virulentas) o rugosas (opacas, granulares, pegajosas). Oxidasa +. Ureasa +. Serología >1:160. Coombs indirecto. Rosa de Bengala. ELISA. Catalasa +. Reducción de nitratos. Indol -. VP -. PCR.",
+		"imagen": "b-melitensis.jpeg"
+	},
+	{
+		"especie": "Brucella abortus",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sangre, Pulmones, Hueso, Piel",
+		"transmision": "Contacto, Ingestión, Inhalación, Zoonosis",
+		"morfologiamicro": "Cocobacilos pequeños inmóviles fastidiosos aerobios estrictos no fermentadores.",
+		"virulencia": "S-LPS (cadena O, antígenos B y M), enzimas (SOD, catalasa, peroxidasa), BvsR y BvsS (quorum sensing), glucanos periplásmicos osmorregulados (OPGs), virB (T4SS).",
+		"epidemiologia": "Enfermedad leve con complicaciones supurativas. Parásito intracelular del sistema reticuloendotelial. Cosmopolita. Reservorio en bovinos. Tejido rico en eritritol. Endémica en México. Riesgo en laboratorios.",
+		"clinico": "Brucelosis (escalofríos, sudoración, fatiga, debilidad, mialgia, pérdida de peso, artralgia, tos no productiva), enfermedad de Bang, fiebre ondulante, síntomas gastrointestinales, osteolíticos, tracto respiratorio, cutáneos, neurológicos, cardiovasculares. Infecciones crónicas.",
+		"identificacion": "Crecimiento capnofílico lento en medios complejos. Colonias lisas (traslúcidas y homogéneas, más virulentas) o rugosas (opacas, granulares, pegajosas). Oxidasa +. Ureasa +. Serología >1:160. Coombs indirecto. Rosa de Bengala. ELISA. Catalasa +. Reducción de nitratos. Indol -. VP -. PCR.",
+		"imagen": "b-melitensis.jpeg"
+	},
+	{
+		"especie": "Brucella suis",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sangre, Pulmones, Hueso, Piel",
+		"transmision": "Contacto, Ingestión, Inhalación, Zoonosis",
+		"morfologiamicro": "Cocobacilos pequeños inmóviles fastidiosos aerobios estrictos no fermentadores.",
+		"virulencia": "S-LPS (cadena O, antígenos B y M), enzimas (SOD, catalasa, peroxidasa), BvsR y BvsS (quorum sensing), glucanos periplásmicos osmorregulados (OPGs), virB (T4SS).",
+		"epidemiologia": "Enfermedad destructiva crónica supurativa. Parásito intracelular del sistema reticuloendotelial. Cosmopolita. Reservorio en cerdos, jabalíes y venados. Tejido rico en eritritol. Endémica en México. Riesgo en laboratorios.",
+		"clinico": "Brucelosis (escalofríos, sudoración, fatiga, debilidad, mialgia, pérdida de peso, artralgia, tos no productiva), enfermedad de Bang, fiebre ondulante, síntomas gastrointestinales, osteolíticos, tracto respiratorio, cutáneos, neurológicos, cardiovasculares. Infecciones crónicas.",
+		"identificacion": "Crecimiento capnofílico lento en medios complejos. Colonias lisas (traslúcidas y homogéneas, más virulentas) o rugosas (opacas, granulares, pegajosas). Oxidasa +. Ureasa +. Serología >1:160. Coombs indirecto. Rosa de Bengala. ELISA. Catalasa +. Reducción de nitratos. Indol -. VP -. PCR.",
+		"imagen": "b-melitensis.jpeg"
+	},
+	{
+		"especie": "Brucella canis",
+		"gram": "Gram -",
+		"forma": "Cocobacilos",
+		"sitio": "Sangre, Pulmones, Hueso, Piel",
+		"transmision": "Contacto, Ingestión, Inhalación, Zoonosis",
+		"morfologiamicro": "Cocobacilos pequeños inmóviles fastidiosos aerobios estrictos no fermentadores.",
+		"virulencia": "S-LPS (cadena O, antígenos B y M), enzimas (SOD, catalasa, peroxidasa), BvsR y BvsS (quorum sensing), glucanos periplásmicos osmorregulados (OPGs), virB (T4SS).",
+		"epidemiologia": "Enfermedad leve con complicaciones supurativas. Parásito intracelular del sistema reticuloendotelial. Cosmopolita. Reservorio en perros, zorros y coyotes. Tejido rico en eritritol. Endémica en México. Riesgo en laboratorios.",
+		"clinico": "Brucelosis (escalofríos, sudoración, fatiga, debilidad, mialgia, pérdida de peso, artralgia, tos no productiva), enfermedad de Bang, fiebre ondulante, síntomas gastrointestinales, osteolíticos, tracto respiratorio, cutáneos, neurológicos, cardiovasculares. Infecciones crónicas.",
+		"identificacion": "Crecimiento capnofílico lento en medios complejos. Colonias lisas (traslúcidas y homogéneas, más virulentas) o rugosas (opacas, granulares, pegajosas). Oxidasa +. Ureasa +. Serología >1:160. Coombs indirecto. Rosa de Bengala. ELISA. Catalasa +. Reducción de nitratos. Indol -. VP -. PCR.",
+		"imagen": "b-melitensis.jpeg"
+	},
+	{
+		"especie": "Clostridioides difficile",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos grandes grampositivos anaeróbicos formadores de endosporas.",
+		"virulencia": "Toxina A (enterotoxina), toxina B (citotoxina), neurotoxinas, toxina binaria.",
+		"epidemiologia": "Cosmopolitas. Presencia en suelo, agua y drenaje. Microbiota del tracto gastrointestinal. Supervivencia en condiciones adversas anaerobias. Adquirido en el hospital. Disbiosis en colon.",
+		"clinico": "Diarrea asociada a antibióticos, colitis pseudomembranosa.",
+		"identificacion": "PCR. MALDI-TOF. Manitol +. Sacarolítico. Proteolítico. Detección de toxinas. ELISA.",
+		"imagen": "c-difficile.jpeg, c-difficile-2.jpeg"
+	},
+	{
+		"especie": "Clostridium perfringens",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Intestino, Sangre",
+		"transmision": "Ingestión",
+		"morfologiamicro": "Bacilos grandes grampositivos anaeróbicos formadores de endosporas.",
+		"virulencia": "Toxinas letales (alfa, beta, épsilon, jota), enterotoxinas (esporulación, superantígeno).",
+		"epidemiologia": "Cosmopolitas. Presencia en suelo, agua y drenaje. Microbiota del tracto gastrointestinal. Supervivencia en condiciones adversas anaerobias.",
+		"clinico": "Intoxicación alimentaria (tipo A), enteritis necrosante (tipo C), celulitis, miositis supurativa, mionecrosis (gangrena de gas), septicemia, colecistitis gangrenosa.",
+		"identificacion": "Crecimiento rápido beta-hemolítico, ELISA. MALDI-TOF. Lecitinasa +. Proteólisis. Inmóvil. Endosporas no visibles. Sacarolítico.",
+		"imagen": "c-perfringens.jpeg, c-perfringens-2.jpeg, c-perfringens-3.jpeg"
+	},
+	{
+		"especie": "Clostridium tetani",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Sangre",
+		"transmision": "Contacto, Hematógena",
+		"morfologiamicro": "Bacilos grandes grampositivos anaeróbicos móviles formadores de endosporas redondas terminales.",
+		"virulencia": "Tetanolisina (lábil a oxígeno), tetanoespasmina (termolábil, A-B, inhibición NT).",
+		"epidemiologia": "Cosmopolitas. Presencia en suelo. Microbiota del tracto gastrointestinal. Supervivencia en condiciones adversas anaerobias.",
+		"clinico": "Tétanos generalizado, local, cefálica, neonatal, provocando parálisis espástica.",
+		"identificacion": "Crecimiento fastidioso por toxicidad de oxígeno. Crecimiento pelicular sobre el agar. Proteólisis. Prueba de neutralización de la antitoxina del tétanos. MALDI-TOF. No fermentador.",
+		"imagen": "c-tetani.jpeg, c-tetani-2.jpeg"
+	},
+	{
+		"especie": "Clostridium botulinum",
+		"gram": "Gram +",
+		"forma": "Bacilos",
+		"sitio": "Intestino",
+		"transmision": "Ingestión, Alimentos contaminados",
+		"morfologiamicro": "Bacilos heterogéneos grampositivos anaeróbicos fastidiosos formadores de endosporas.",
+		"virulencia": "Toxina botulínica (A-B inactivadora de la liberación de ACh).",
+		"epidemiologia": "Cosmopolitas. Presencia en suelo, agua y drenaje. Microbiota del tracto gastrointestinal. Supervivencia en condiciones adversas anaerobias.",
+		"clinico": "Botulismo alimentario, infantil, en heridas, por inhalación, provocando parálisis flácida.",
+		"identificacion": "Actividad tóxica en alimentos o muestras. Crecimiento tras calentamiento a 80 °C por 10 minutos. MALDI-TOF"
+	},
+	{
+		"especie": "Treponema pallidum",
+		"gram": "Gram -",
+		"forma": "Espiroquetas",
+		"sitio": "Genitales, Sangre, Sistema nervioso",
+		"transmision": "Sexual, Hematógena, Vertical",
+		"morfologiamicro": "Bacterias helicoidales delgadas gramnegativas anaerobias con puntas afiladas.",
+		"virulencia": "Falta de antígenos en la superficie celular, resistencia a la fagocitosis, adherencia a fibronectina, hemolisinas, hialuronidasa, lipoproteínas TpN47, TpN17, TpN15.",
+		"epidemiologia": "Sensibilidad al oxígeno. Cosmopolita. Población sexualmente activa. Exclusiva a humanos. Coinfección con VIH",
+		"clinico": "Sífilis venérea, congénita (chancros, úlcera indolora, diseminación, linfadenopatía, latencia, cardiovascular, neurosífilis, granuloma).",
+		"identificacion": "Microscopía de campo oscuro, fluorescencia. Prueba directa de fluorescencia de anticuerpos. PCR. Serología (cardiolipina, treponémicas). ELISA.",
+		"imagen": "t-pallidum.jpeg, t-pallidum-2.jpeg, t-pallidum-3.jpeg"
+	},
+	{
+		"especie": "Borrelia burgdorferi",
+		"gram": "Gram -",
+		"forma": "Espiroquetas",
+		"sitio": "Sangre, Piel, Sistema nervioso, Hueso, Ojo",
+		"transmision": "Zoonosis",
+		"morfologiamicro": "Bacterias helicoidales grandes gramnegativas microaerófilas.",
+		"virulencia": "Proteínas de superficie exterior (OspA, OspC), FlaA, FlaB, BmpA, VlsE.",
+		"epidemiologia": "Infección bacteriana por vector (garrapatas duras). Presente en ratones. Al alimentarse, las larvas adquieren la bacteria. Inoculación tras mordida de la ninfa.",
+		"clinico": "Borreliosis de Lyme (eritema migrante, artritis, meningitis aséptica, cardiacas, linfocitoma, acrodermatitis crónica atrófica, radiculitis dolorosa, encefalomieloradiculitis, producción de anticuerpos intratecales, manifestaciones oculares).",
+		"identificacion": "Serología IgG, ensayos de inmunofluorescencia y ELISA. Cultivo. PCR. Biopsia.",
+		"imagen": "b-burgdorferi.jpeg, b-burgdorferi-2.jpeg, b-burgdorferi-3.jpeg"
+	},
+	{
+		"especie": "Leptospira interrogans",
+		"gram": "Gram -",
+		"forma": "Espiroquetas",
+		"sitio": "Sangre, Sistema nervioso, Vías urinarias",
+		"transmision": "Contacto, Zoonosis",
+		"morfologiamicro": "Bacterias helicoidales delgadas gramnegativas aerobios estrictos en forma de resorte con puntas curvadas.",
+		"virulencia": "Flagelos periplásmicos.",
+		"epidemiologia": "La gravedad depende del número de organismos infectantes, el estado inmunológico del huésped y la virulencia de la cepa infectante. Diseminación rápida desde el sitio de entrada en cortes o abrasiones hacia sangre y líquido cefalorraquídeo. Reservorios ratones y mamíferos pequeños. Contaminación con orina.",
+		"clinico": "Leptospirosis subclínica, leve o enfermedad de Weil (similar a enfermedades virales), bacteremia inicial, diseminación.",
+		"identificacion": "Crecimiento muy lento en medios suplementados a 28 a 30 °C. Microscopía de campo oscuro. PCR. Serología de aglutinación. ELISA. Inmunohistoquímica.",
+		"imagen": "l-interrogans.jpeg, l-interrogans-2.jpeg"
+	},
+	{
+		"especie": "Mycoplasma pneumoniae",
+		"gram": "",
+		"forma": "Micoplasma",
+		"sitio": "Pulmones, Sistema nervioso, Sangre, Hueso",
+		"transmision": "Inhalación",
+		"morfologiamicro": "Micoplasmas pleomórficos muy pequeños.",
+		"virulencia": "Esteroles de membrana, adhesina P1 (ciliostasis, destrucción), superantígeno, cambio antigénico de lipoproteínas de superficie, cambios citopáticos, proteasa IgA.",
+		"epidemiologia": "Patógeno estricto. Colonizador de nariz, garganta, tráquea y vías inferiores en niños. Portadores asintomáticos.",
+		"clinico": "Traqueobronquitis, neumonía atípica, faringitis, complicaciones (neurológicas, pericarditis, anemia hemolítica, artritis, lesiones mucocutáneas).",
+		"identificacion": "Aerobio estricto. Crecimiento lento en medios enriquecidos. PCR. Serología. ELISA.",
+		"imagen": "m-pneumoniae.jpeg"
+	},
+	{
+		"especie": "Ureaplasma urealyticum",
+		"gram": "",
+		"forma": "Micoplasma",
+		"sitio": "Pulmones, Sangre, Vías urinarias",
+		"transmision": "Sexual, Vertical",
+		"morfologiamicro": "Micoplasmas pleomórficos muy pequeños.",
+		"virulencia": "PLA1, PLA2, PLC membranales, inducción de citocinas proinflamatorias, proteasa IgA.",
+		"epidemiologia": "Colonizador del tracto urinario.",
+		"clinico": "Infecciones de tracto genitourinario, orofaringe, tracto respiratorio bajo, placentarias (amnionitis), sepsis neonatal.",
+		"identificacion": "PCR. Serología indirecta. Colonias tipo huevo frito. inmunofluorescencia.",
+		"imagen": "u-urealyticum.jpeg"
+	},
+	{
+		"especie": "Chlamydia trachomatis",
+		"gram": "",
+		"forma": "",
+		"sitio": "Genitales, Pulmones, Ojo, Vías urinarias",
+		"transmision": "Contacto, Sexual, Vertical",
+		"morfologiamicro": "Bacterias con doble membrana de ciclo de desarrollo único.",
+		"virulencia": "Cuerpos elementales EBs (infecciosos), cuerpos reticulares RBs (replicativos), LPS (endotoxina débil), proteína mayor de membrana exterior (MOMP), proteína de membrana exterior 2 (OMP 2), robo de energía del huésped.",
+		"epidemiologia": "Parásitos intracelulares obligados. Resistencia al medio ambiente. Adhesión a células suceptibles, penetración, conversión de EB a R.",
+		"clinico": "Tracoma (crónica, conjuntivitis folicular), conjuntivitis adulta de inclusión, neonatal, neumonía infantil, infecciones urogenitales (exudado mucopurulento, síndrome de Reiter), linfogranuloma venéreo (proctitis).",
+		"identificacion": "Inclusiones histológicas (RBs). Detección antigénica por inmunofluorescencia o ELISA. PCR."
+	}
+]
+</script>
+<script>
+
+const $ = id => document.getElementById(id);
+
+let D = JSON.parse($('data').textContent), view = 'todas', q = '', sel = new Set();
+
+const F = [
+	['morfologiamicro','Morfología Microscópica'],
+	['virulencia','Factores de Virulencia'],
+	['epidemiologia','Epidemiología'],
+	['clinico','Manifestaciones Clínicas'],
+	['identificacion','Identificación']
+];
+
+const V = [
+	['todas','Todas'],
+	['gram','Por Gram'],
+	['forma','Por forma'],
+	['sitio','Por sitio de infección'],
+	['transmision','Por transmisión']
+];
+
+const multi = k => k === 'sitio' || k === 'transmision';
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => (
+	{
+		'&':'&amp;',
+		'<':'&lt;',
+		'>':'&gt;',
+		'"':'&quot;'
+	}
+	[c]
+));
+
+const vals = (b,k) => {
+	const v = String(b[k] || '');
+	const a = (multi(k) ? v.split(',') : [v]).map(s => s.trim()).filter(Boolean);
+	return a.length ? a : ['Sin clasificar'];
+};
+
+function card(b) {
+	const i = D.indexOf(b);
+	return `
+		<div class="card ${cls(b)}">
+			<div class="row">
+				<input type="checkbox" data-cmp="${i}" ${sel.has(i) ? 'checked' : ''} aria-label="Comparar">
+				<b><i>${esc(b.especie)}</i></b>
+			</div>
+			<div class="tags">${
+				[b.gram, b.forma].filter(Boolean).map(t => `<span>${esc(t)}</span>`).join('')
+				}
+			</div>
+			<details>
+				<summary>Ver ficha</summary>
+				${b.imagen ? `
+					<div class="imgs">
+						${String(b.imagen).split(',').map(s => `
+							<img src="img/${encodeURIComponent(s.trim())}" alt="${esc(b.especie)}" loading="lazy" onerror="this.remove()">`).join('')}
+					</div>${b.pie ? `
+						<p class="mut">${esc(b.pie)}</p>` : ''}` : ''
+				}
+				${F.map(([k,l]) => `
+					<h4>${l}</h4>
+					<p>${esc(b [k] || '—')}</p>
+				`).join('')}
+				<h4>Sitio de infección</h4>
+				<p>${esc(b.sitio || '—')}</p>
+				<h4>Vía de transmisión</h4>
+				<p>${esc(b.transmision || '—')}</p>
+			</details>
+		</div>`
+}
+
+function list() {
+	const t = q.toLowerCase();
+	const r = D.filter(b => !t || JSON.stringify(b).toLowerCase().includes(t)).sort((a,b) => a.especie.localeCompare(b.especie, 'es'));
+	const el = $('list');
+	if (!D.length) {
+		el.innerHTML = '<p class="mut">Aún no hay bacterias.</p>';
+		return
+	}
+	if (!r.length) {
+		el.innerHTML = '<p class="mut">Nada coincide con tu búsqueda.</p>';
+		return
+	}
+	if (view === 'todas') {
+		el.innerHTML = r.map(card).join('');
+		return
+	}
+	const g = {};
+	r.forEach(b => vals(b, view).forEach(v => (g[v] = g[v] || []).push(b)));
+	el.innerHTML = Object.keys(g).sort((a,b) => a.localeCompare(b, 'es')).map(k => `
+		<h3>
+			${esc(k)} 
+			<small>${g[k].length}</small>
+		</h3>`
+		+g[k].map(card).join('')).join('')
+}
+
+function cmp() {
+	const el = $('cmp'), s = [...sel].map(i => D[i]).filter(Boolean);
+	if (s.length < 2) {
+		el.innerHTML = '';
+		return
+	}
+
+	const rows = [
+	['gram','Gram'],
+	['forma','Forma'],
+	['sitio','Sitio'],
+	['transmision','Transmisión'],
+	...F];
+
+	el.innerHTML = '<div class="scroll"><table><tr><th></th>'
+	+ s.map(b => `<th><i>${esc(b.especie)}</i></th>`).join('')
+	+ '</tr>'
+	+ rows.map(([k,l]) => `<tr><th>${l}</th>`
+	+ s.map(b => `<td>${esc(b[k] || '—')}</td>`).join('')
+	+ '</tr>').join('')
+	+ '</table></div><button class="lnk" id="clr">Quitar comparación</button>'
+}
+
+function fichas() {
+	$('fichas').innerHTML = V.map(([k,l]) => `<button data-v="${k}" class="${k === view ? 'on' : ''}">${l}</button>`).join('')
+}
+
+$('fichas').onclick = e => {
+	const v = e.target.dataset.v;
+	if (v) {
+		view = v;
+		fichas();
+		list()
+	}
+};
+
+$('q').oninput = e => {
+	q = e.target.value;
+	list()
+};
+
+$('list').onclick = e => {
+	const t = e.target;
+	if (t.dataset.cmp !== undefined) {
+		const i = +t.dataset.cmp;
+		t.checked ? sel.add(i) : sel.delete(i);
+		cmp()
+	}
+	$('cmp').onclick = e => {
+		if (e.target.id === 'clr') {
+			sel.clear();
+			cmp();
+			list()
+		}
+	};
+}
+
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const ZONAS={
+  cabeza:['Cabeza y sistema nervioso',['nervioso','snc','cerebr','menin','ojo','conjuntiv','oido']],
+  garganta:['Garganta',['faring','garganta','amigdal','laring']],
+  pulmones:['Pulmones',['pulmon','respirator','bronqu','neumon']],
+  corazon:['Corazón',['corazon','endocard','cardi']],
+  abdomen:['Aparato digestivo',['digestiv','gastro','intestin','colon','estomago','tracto gi','higado']],
+  urinario:['Vías urinarias',['urin','orina','rinon','vejiga']],
+  genital:['Aparato genital',['genital','uretr','vagin','cervi','sexual']],
+  piel:['Piel y tejidos blandos',['piel','tejidos blandos','cutane','herida']],
+  huesos:['Huesos y articulaciones',['hueso','osteo','articul']],
+  sangre:['Sangre',['sangre','bacteriemia','sepsis','sistemic']]
+};
+
+function zona(z){
+  const [nombre,claves] = ZONAS[z];
+  document.querySelectorAll('#mapa [data-z]').forEach(e => e.classList.toggle('on', e.dataset.z===z));
+  const r = D.filter(b => claves.some(c => norm(b.sitio).includes(c)));
+  $('zres').innerHTML=`
+  	<h3>${nombre} 
+		<small>${r.length}</small>
+	</h3>`+
+	(r.length?r.map(card).join(''):'<p class="mut">Ninguna bacteria registrada aquí.</p>');
+}
+$('mapa').onclick = e => {
+	const z = e.target.dataset.z;
+	if(z)zona(z)
+};
+
+$('zres').onclick = $('list').onclick;
+
+const cls = b => {
+  const g = norm(b.gram), f = norm(b.forma);
+  const gc = (g.includes('+') || g.includes('pos')) ? 'gp' : (g.includes('-') || g.includes('neg')) ? 'gn' : '';
+  const fc = f.includes('cocobacil') ? 'f-cocobacilo' : f.includes('coco') ? 'f-coco' : f.includes('bacil') ? 'f-bacilo' : f.includes('espiro') ? 'f-espiro' : '';
+  return gc + ' ' + fc;
+};
+
+fichas();
+list();
+
+</script>
+</body>
+</html>
