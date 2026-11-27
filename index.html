@@ -222,55 +222,6 @@ th, td {
 	border: 1px solid var(--bd);
 }
 
-#cuerpo {
-	position:relative;
-	width:260px;
-	max-width:100%;
-	height:440px;
-	margin:8px auto;
-}
-
-#cuerpo::before {
-	content:"";
-	position:absolute;
-	left:28%;
-	top:14%;
-	width:44%;
-	height:52%;
-	border:2px solid var(--bd);
-	border-radius:36px;
-}
-
-#cuerpo::after {
-	content:"";
-	position:absolute;
-	left:38%;
-	top:0;
-	width:24%;
-	height:13%;
-	border:2px solid var(--bd);
-	border-radius:50%
-}
-
-#cuerpo button {
-	position:absolute;
-	transform:translate(-50%,-50%);
-	width:48px;
-	height:48px;
-	padding:0;
-	font-size:1.6rem;
-	line-height:1;
-	background:var(--card);
-	border:2px solid var(--ac);
-	border-radius:50%;
-	cursor:pointer
-}
-
-#cuerpo button.on, #cuerpo button:hover {
-	background:var(--ac2);
-	transform:translate(-50%,-50%) scale(1.15)
-}
-
 .card {
 	--h:0;
 	--s:0%;
@@ -313,6 +264,53 @@ th, td {
 	text-align: center;
 }
 
+#dgm { 
+	position: relative;
+	min-width: 900px;
+	background: #fff;
+	border: 1px solid var(--bd);
+	border-radius: 10px;
+}
+
+#dgm img {
+	display: block;
+	width: 100%;
+	border-radius: 10px;
+}
+
+#dgm button {
+	position: absolute;
+	transform: translate(-50%,-50%);
+	width: 8%;
+	aspect-ratio: 1;
+	padding: 0;
+	background: transparent;
+	border: 2px solid transparent;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#dgm button:hover {
+	border-color: var(--ac);
+	background: rgba(31,122,90,.15);
+}
+
+#dgm button.on {
+	border-color: var(--ac);
+	background: rgba(31,122,90,.28)
+}
+
+#dgm button.tx {
+	width: auto;
+	aspect-ratio: auto;
+	padding: 2px 10px;
+	border-radius: 99px;
+	background: var(--card);
+	color: var(--fg);
+	border-color: var(--ac);
+	font-size: .75rem
+}
+
 	</style>
 </head>
 
@@ -324,24 +322,28 @@ th, td {
 	</div>
 
 	<input type="search" id="q" placeholder="Buscar especie...">
-	<details id="mapa">
-  <summary>Mapa del cuerpo</summary>
-  <div id="cuerpo">
-  <button data-z="cabeza" title="Cabeza y sistema nervioso" style="top: 7%; left: 50%;">🧠</button>
-  <button data-z="garganta" title="Garganta" style="top: 18%; left: 50%;">👄</button>
-  <button data-z="pulmones" title="Pulmones" style="top: 29%; left: 38%;">🫁</button>
-  <button data-z="corazon" title="Corazón" style="top: 29%; left: 62%;">🫀</button>
-  <button data-z="abdomen" title="Aparato digestivo" style="top: 42%; left: 50%;">🍽️</button>
-  <button data-z="urinario" title="Vías urinarias" style="top: 54%; left: 50%;">💧</button>
-  <button data-z="genital" title="Aparato genital" style="top: 64%; left: 50%;">🚻</button>
-  <button data-z="piel" title="Piel y tejidos blandos" style="top: 38%; left: 12%;">🖐️</button>
-  <button data-z="piel" title="Piel y tejidos blandos" style="top: 38%; left: 88%;">🖐️</button>
-  <button data-z="huesos" title="Huesos y articulaciones" style="top: 80%; left: 40%;">🦴</button>
-  <button data-z="huesos" title="Huesos y articulaciones" style="top: 80%; left: 60%;">🦴</button>
-  <button data-z="sangre" title="Sangre" style="top: 93%; left: 50%;">🩸</button>
-</div>
+	
+	<div id="mapa">
+  <h3>Mapa Integrador</h3>
+  <p class="mut">Toca un órgano para ver las fichas de las bacterias.</p>
+  <div class="scroll">
+    <div id="dgm">
+      <img src="img/diagrama.jpeg" alt="Diagrama de bacterias por sitio de infección">
+      <button data-z="nasofaringe" title="Nasofaringe" style="left:32%;top:14.7%"></button>
+      <button data-z="cerebro" title="Cerebro" style="left:67.2%;top:13.8%"></button>
+      <button data-z="pulmones" title="Pulmones" style="left:35.3%;top:28.8%"></button>
+      <button data-z="corazon" title="Corazón" style="left:66%;top:51.4%"></button>
+      <button data-z="estomago" title="Estómago" style="left:71.6%;top:62%"></button>
+      <button data-z="intestino" title="Intestino" style="left:68.9%;top:78.4%"></button>
+      <button data-z="vejiga" title="Vejiga" style="left:34.6%;top:85.3%"></button>
+      <button data-z="reproductor" title="Aparato reproductor" style="left:55.4%;top:86.3%"></button>
+      <button data-z="piel" class="tx" style="left:41.7%;top:64.7%">🖐️ Piel</button>
+      <button data-z="piel" class="tx" style="left:60.6%;top:64.7%">🖐️ Piel</button>
+    </div>
+  </div>
   <div id="zres"></div>
-</details>
+  </div>
+
 	<div class="fichas" id="fichas"></div>
 	<div id="cmp"></div>
 	<div id="list"></div>
@@ -511,7 +513,7 @@ Licenciatura en Químico Farmacobiólogo</p>
 		"gram": "Gram +",
 		"forma": "Bacilos",
 		"sitio": "Garganta, Piel",
-		"transmision": "Inhalación, Contacto.",
+		"transmision": "Inhalación, Contacto",
 		"morfologiamicro": "Bacilos grampositivos aerobios inmóviles catalasa positivos pleomórficos agrupados en cadenas cortas y en letras chinas.",
 		"virulencia": "Ácidos micólicos de cadena corta, toxina diftérica (fago beta, exotoxina A-B) regulada por DTxR. Ácido diaminopimélico.",
 		"epidemiologia": "Cosmopolita. Colonizadores de piel, tracto respiratorio superior, gastrointestinal y urogenital. Enfermedad pediátrica.",
@@ -1242,32 +1244,29 @@ $('list').onclick = e => {
 }
 
 const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-const ZONAS={
-  cabeza:['Cabeza y sistema nervioso',['nervioso','snc','cerebr','menin','ojo','conjuntiv','oido']],
-  garganta:['Garganta',['faring','garganta','amigdal','laring']],
-  pulmones:['Pulmones',['pulmon','respirator','bronqu','neumon']],
-  corazon:['Corazón',['corazon','endocard','cardi']],
-  abdomen:['Aparato digestivo',['digestiv','gastro','intestin','colon','estomago','tracto gi','higado']],
-  urinario:['Vías urinarias',['urin','orina','rinon','vejiga']],
-  genital:['Aparato genital',['genital','uretr','vagin','cervi','sexual']],
-  piel:['Piel y tejidos blandos',['piel','tejidos blandos','cutane','herida']],
-  huesos:['Huesos y articulaciones',['hueso','osteo','articul']],
-  sangre:['Sangre',['sangre','bacteriemia','sepsis','sistemic']]
+const ORG = {
+  nasofaringe: ['Nasofaringe',['pyogenes','agalactiae','streptococcus pneumoniae','aggregatibacter']],
+  cerebro: ['Cerebro',['neonato','listeria']],
+  pulmones: ['Pulmones',['mycoplasma','klebsiella','haemophilus','tuberculosis','neisseria meningitidis','pasteurella']],
+  corazon: ['Corazón',['brucella','borrelia','leptospira']],
+  estomago: ['Estómago',['helicobacter']],
+  intestino: ['Intestino',['vibrio','campylobacter','salmonella','shigella','coli enterotox','coli enterohem','coli enteropat','difficile','botulinum']],
+  vejiga: ['Vejiga y vías urinarias',['saprophyticus','faecalis','faecium','coli uropat','proteus','citrobacter','enterobacter','serratia']],
+  reproductor: ['Aparato reproductor',['treponema','chlamydia','gonorrhoeae','ureaplasma']],
+  piel: ['Piel',['staphylococcus aureus','epidermidis','anthracis','cereus','coryne','leprae','pseudomonas','acinetobacter','tetani','perfringens']]
 };
 
-function zona(z){
-  const [nombre,claves] = ZONAS[z];
-  document.querySelectorAll('#mapa [data-z]').forEach(e => e.classList.toggle('on', e.dataset.z===z));
-  const r = D.filter(b => claves.some(c => norm(b.sitio).includes(c)));
-  $('zres').innerHTML=`
-  	<h3>${nombre} 
-		<small>${r.length}</small>
-	</h3>`+
-	(r.length?r.map(card).join(''):'<p class="mut">Ninguna bacteria registrada aquí.</p>');
+function zona(z) {
+  const [nombre, claves] = ORG[z];
+  document.querySelectorAll('#mapa [data-z]').forEach(e => e.classList.toggle('on', e.dataset.z === z));
+  const r = D.filter(b => claves.some(c => norm(b.especie).includes(c)));
+  $('zres').innerHTML = `<h3>${nombre} <small>${r.length}</small></h3>` +
+    (r.length ? r.map(card).join('') : '<p class="mut">No hay bacterias asignadas a este órgano en el diagrama.</p>');
 }
+
 $('mapa').onclick = e => {
 	const z = e.target.dataset.z;
-	if(z)zona(z)
+	if (z) zona(z)
 };
 
 $('zres').onclick = $('list').onclick;
